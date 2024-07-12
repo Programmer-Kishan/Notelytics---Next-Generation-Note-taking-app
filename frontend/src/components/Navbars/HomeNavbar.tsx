@@ -20,8 +20,8 @@ const HomeNavbar = () => {
             
         </ul>
         <div className="w-1/5 flex justify-evenly">
-            <GeneralButtons text="Login" bgColor="#FF2E63" textColor="#fff" to="login"/>
-            <GeneralButtons text="SignUp" bgColor="#FF2E63" textColor="#fff" to="signup"/>
+            <GeneralButtons text="Login" bgColor="#FF2E63" textColor="#fff" to="login" hoverColor="#ed2b5c"/>
+            <GeneralButtons text="SignUp" bgColor="#FF2E63" textColor="#fff" to="signup" hoverColor="#ed2b5c"/>
         </div>
     </nav>
   )

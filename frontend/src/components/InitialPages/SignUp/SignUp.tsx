@@ -10,7 +10,13 @@ const SignUp = () => {
         <FormInput label="Email" type="email" />
         <FormInput label="Password" type="password" />
         <p>Already have an account <a href="#" className="underline">Login</a></p>
-        <LongButtons text="Submit" bgColor="#08D9D6" textColor="#000000" type="submit" />
+        <LongButtons 
+          text="Submit" 
+          bgColor="#08D9D6"
+          textColor="#000000" 
+          type="submit"
+          hoverColor="#06c2bf"
+        />
       </form>
     </div>
   )

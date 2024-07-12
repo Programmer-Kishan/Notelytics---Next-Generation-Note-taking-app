@@ -4,8 +4,8 @@ export interface IUser extends Document {
     username: string,
     email: string,
     password: string,
-    notebooks: mongoose.Types.ObjectId[],
-    notebookNames: string[],
+    notebooks?: mongoose.Types.ObjectId[],
+    notebookNames?: string[],
 }
 
 const userSchema = new Schema({
