@@ -44,3 +44,36 @@ export const SignUp:RequestHandler<unknown, unknown, SignUpBody, unknown> = asyn
     }
 }
 
+interface LoginBody {
+    username: string,
+    password: string,
+}
+
+export const Login:RequestHandler<unknown, unknown, LoginBody, unknown> = async (req, res, next) => {
+    const {username, password} = req.body;
+
+    try {
+        if (!username || !password) {
+            throw createHttpError(401, "Parameters missing");
+        }
+
+        const user = await UserModel.findOne({username: username}).exec();
+
+        if (!user) {
+            throw createHttpError(400, "Invalid Credentials");
+        }
+
+        const passwordMatch = await bcrypt.compare(password, user.password!);
+
+        if (!passwordMatch) {
+            throw createHttpError(400, "Invalid Credentials");
+        }
+
+        // TODO: Add user session here
+        res.status(200).json(user);
+
+    } catch (error) {
+        next(error);
+    }
+}
+

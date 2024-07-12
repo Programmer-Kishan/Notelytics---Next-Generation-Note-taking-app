@@ -1,5 +1,6 @@
 import { useState, FormEvent } from "react"
 import { Blocks } from "react-loader-spinner"
+import { NavLink } from "react-router-dom"
 
 import LongButtons from "../../Buttons/LongButtons"
 import FormInput from "../../Inputs/FormInput"
@@ -10,9 +11,10 @@ const SignUp = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [emailError, setEmailError] = useState({
+  const [emailError, setEmailError] = useState<{value: boolean, taken: boolean | string}>({
     value: false, taken: false
   });
+  const [nameError, setNameError] = useState<boolean | string>(false);
 
   // In JavaScript, when you write const formData = new FormData(event.target), the event.target is implicitly 
   // typed as EventTarget, which is a generic type that represents the target of an event.
@@ -38,6 +40,12 @@ const SignUp = () => {
     event.preventDefault()
 
     setIsLoading(true);
+    setNameError(false);
+    setEmailError({
+      value: false, taken: false
+    })
+
+
     const fd = new FormData(event.target as HTMLFormElement)
     if (!validateEmail(fd.get("email") as string)) {
       setEmailError({
@@ -56,9 +64,19 @@ const SignUp = () => {
         email: data.email as string,
         password: data.password as string,
       })
+      // TODO: Needs to redirect to Dashboard
       console.log(newUser)
     } catch (error) {
       console.log(error);
+      if (error.message.includes("Username")) {
+        setNameError(error.message)
+        return ;
+      } else if (error.message.includes("Email")) {
+        setEmailError({
+          value: false, taken: `${error.message}`
+        })
+        return ;
+      }
     } finally {
       setIsLoading(false);
     }
@@ -79,13 +97,17 @@ const SignUp = () => {
         onSubmit={(e) => handleSubmit(e)}
       >
         <h1 className="text-white text-5xl text-center font-montserrat font-extrabold">Sign Up</h1>
-        <FormInput label="Username" type="text" name="username" disabled={isLoading} />
+        <div className="flex flex-col gap-2">
+          <FormInput label="Username" type="text" name="username" disabled={isLoading} />
+          {nameError && <p className="error-sm-text">{nameError}</p>}
+        </div>
         <div className="flex flex-col gap-2">
           <FormInput label="Email" type="email" name="email" disabled={isLoading} />
-          {emailError.value && <p className="text-sm text-[#EAEAEA] font-poppins">Please Enter Valid Email Address</p>}
+          {emailError.value && <p className="error-sm-text">Please Enter Valid Email Address</p>}
+          {emailError.taken && <p className="error-sm-text">Email Already taken, Please use a different email address.</p>}
         </div>
         <FormInput label="Password" type="password" name="password" disabled={isLoading} />
-        <p>Already have an account <a href="#" className="underline">Login</a></p>
+        <p>Already have an account <NavLink to="/login" className="underline">Login</NavLink></p>
         <LongButtons
           text="Submit"
           bgColor="#08D9D6"

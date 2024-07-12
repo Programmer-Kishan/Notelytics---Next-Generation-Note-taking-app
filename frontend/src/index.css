@@ -8,6 +8,10 @@
     .nav-text {
         @apply font-semibold text-xl cursor-pointer hover:border-b-2 transition-all
     }
+
+    .error-sm-text {
+        @apply text-sm text-[#EAEAEA] font-poppins
+    }
 }
 
 @layer utilities {
