@@ -1,15 +1,19 @@
-import { useState, FormEvent } from "react"
+import { useState, FormEvent, useContext } from "react"
 import { Blocks } from "react-loader-spinner";
 import { NavLink } from "react-router-dom";
 
 import LongButtons from "../../Buttons/LongButtons"
 import FormInput from "../../Inputs/FormInput"
 import * as UserApi from "../../../network/user_api";
+import { CookieContext } from "../../../store/cookie-context";
+import { CookieContextType } from "../../../@types/cookie";
 
 const Login = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [credError, setCredError] = useState<string | null>(null)
+
+  const ctx = useContext(CookieContext) as CookieContextType;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -25,7 +29,8 @@ const Login = () => {
         password: data.password as string
       })
       // TODO: Needs to redirect to dashboard
-      console.log(user);
+      console.log(typeof(user), user);
+      ctx.setCookies(user);
     } catch(error) {
       console.log(error.message);
       setCredError(error.message as string);

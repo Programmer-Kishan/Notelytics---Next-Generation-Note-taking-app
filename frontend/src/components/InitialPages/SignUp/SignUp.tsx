@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react"
+import { useState, FormEvent, useContext } from "react"
 import { Blocks } from "react-loader-spinner"
 import { NavLink } from "react-router-dom"
 
@@ -6,15 +6,18 @@ import LongButtons from "../../Buttons/LongButtons"
 import FormInput from "../../Inputs/FormInput"
 import { validateEmail } from "../../../utils/validation"
 import * as UserApi from "../../../network/user_api";
+import { CookieContext } from "../../../store/cookie-context"
+import { CookieContextType } from "../../../@types/cookie"
 
 const SignUp = () => {
 
   const [isLoading, setIsLoading] = useState(false);
-
   const [emailError, setEmailError] = useState<{value: boolean, taken: boolean | string}>({
     value: false, taken: false
   });
   const [nameError, setNameError] = useState<boolean | string>(false);
+
+  const ctx = useContext(CookieContext) as CookieContextType;
 
   // In JavaScript, when you write const formData = new FormData(event.target), the event.target is implicitly 
   // typed as EventTarget, which is a generic type that represents the target of an event.
@@ -66,6 +69,7 @@ const SignUp = () => {
       })
       // TODO: Needs to redirect to Dashboard
       console.log(newUser)
+      ctx.setCookies(newUser)
     } catch (error) {
       console.log(error);
       if (error.message.includes("Username")) {
