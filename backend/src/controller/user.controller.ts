@@ -38,6 +38,9 @@ export const SignUp:RequestHandler<unknown, unknown, SignUpBody, unknown> = asyn
         })
 
         // TODO: add the user to session
+        req.session.userId = newUser._id;
+        req.session.name = newUser.username;
+
         res.status(200).json(newUser);
     } catch (error) {
         next(error);

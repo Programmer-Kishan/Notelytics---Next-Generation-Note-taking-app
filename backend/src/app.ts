@@ -2,8 +2,11 @@ import "dotenv/config"
 import express, {Request, Response, NextFunction} from "express";
 import morgan from "morgan";
 import createHttpError, { isHttpError } from 'http-errors';
+import session from "express-session";
+import MongoStore from 'connect-mongo';
 
-import UserModel from "./models/user";
+// import UserModel from "./models/user";
+import env from "./utils/ValidateEnv";
 import userRoutes from "./routes/user.route";
 
 const app = express();
@@ -11,10 +14,23 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
 
-app.get("/", async (req, res) => {
-    const users = await UserModel.find().exec();
-    res.status(200).json(users);
-})
+// app.get("/", async (req, res) => {
+//     const users = await UserModel.find().exec();
+//     res.status(200).json(users);
+// })
+
+app.use(session({
+    secret: env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 60*60*1000
+    },
+    rolling: true,
+    store: MongoStore.create({
+        mongoUrl: env.MONGO_CONNECTION_STRING
+    })
+}))
 
 app.use("/api/user", userRoutes);
 
