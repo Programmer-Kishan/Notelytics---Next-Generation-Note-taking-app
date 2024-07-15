@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom"
 import ButtonProps from "./ButtonInterface"
 
 interface AdditionalProps {
-  to: string
+  to?: string
 }
 
 const GeneralButtons = ({text, bgColor, textColor, hoverColor, to}: ButtonProps & AdditionalProps) => {

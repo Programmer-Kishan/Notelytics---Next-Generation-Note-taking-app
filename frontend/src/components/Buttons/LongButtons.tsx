@@ -2,11 +2,7 @@ import { useState } from "react";
 
 import ButtonProps from "./ButtonInterface"
 
-interface AdditionalProps {
-    type: "submit" | "reset"
-}
-
-const LongButtons = ({text, bgColor, textColor, hoverColor, type}: ButtonProps & AdditionalProps) => {
+const LongButtons = ({text, bgColor, textColor, hoverColor, type="button"}: ButtonProps) => {
   // used for hover effect
   const [isFocused, setIsFocused] = useState(false);
   return (

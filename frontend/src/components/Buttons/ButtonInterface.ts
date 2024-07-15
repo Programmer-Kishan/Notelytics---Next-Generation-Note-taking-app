@@ -3,4 +3,5 @@ export default interface ButtonProps {
     bgColor: string,
     textColor?: string,
     hoverColor?: string,
+    type?: "submit" | "reset" | "button"
 }
