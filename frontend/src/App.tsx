@@ -4,6 +4,8 @@ import HomePage from "./components/InitialPages/HomePage/HomePage"
 import SignUp from "./components/InitialPages/SignUp/SignUp"
 import Login from "./components/InitialPages/Login/Login"
 import HomeLayout from "./Layouts/HomeLayout"
+import UserLayout from "./Layouts/UserLayout"
+import UserDashboard from "./components/Dashboard/UserDashboard"
 
 function App() {
 
@@ -26,6 +28,16 @@ function App() {
         }
       ]
     },
+    {
+      path: "/user",
+      element: <UserLayout />,
+      children: [
+        {
+          path: ":userId",
+          element: <UserDashboard />
+        }
+      ]
+    }
   ])
 
   return (

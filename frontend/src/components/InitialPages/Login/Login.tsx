@@ -1,6 +1,6 @@
 import { useState, FormEvent, useContext } from "react"
 import { Blocks } from "react-loader-spinner";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import LongButtons from "../../Buttons/LongButtons"
 import FormInput from "../../Inputs/FormInput"
@@ -9,6 +9,8 @@ import { CookieContext } from "../../../store/cookie-context";
 import { CookieContextType } from "../../../@types/cookie";
 
 const Login = () => {
+
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
   const [credError, setCredError] = useState<string | null>(null)
@@ -31,6 +33,7 @@ const Login = () => {
       // TODO: Needs to redirect to dashboard
       console.log(typeof(user), user);
       ctx.setCookies(user);
+      navigate(`/user/${user._id}`);
     } catch(error) {
       console.log(error.message);
       setCredError(error.message as string);
