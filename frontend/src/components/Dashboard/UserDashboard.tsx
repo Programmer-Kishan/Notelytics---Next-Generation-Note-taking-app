@@ -12,7 +12,7 @@ const UserDashboard = () => {
       <NoteBookModal ref={notebookDialog}/>
       <div className="w-full flex justify-end">
         <button
-          className="p-2 text-[#EAEAEA] bg-transparent border-2 border-[#EAEAEA] rounded-lg font-poppins text-base shadow-[0_0_3px_#EAEAEA] transition-shadow hover:shadow-[0_0_8px_#EAEAEA]"
+          className="p-2 text-[#08D9D6] bg-transparent border-2 border-[#08D9D6] rounded-lg font-poppins text-base shadow-[0_0_3px_#08D9D6] transition-shadow hover:shadow-[0_0_8px_#08D9D6]"
           onClick={() => notebookDialog.current?.showModal()}
         >
           +Create NoteBook

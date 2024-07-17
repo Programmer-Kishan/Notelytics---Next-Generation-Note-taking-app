@@ -10,7 +10,6 @@ interface CreateNotebookBody {
 
 export const CreateNotebook:RequestHandler<unknown, unknown, CreateNotebookBody, unknown> = async(req, res, next) => {
     const userId = req.session["userId"];
-    console.log("User Id: ", userId);
     const {title, description} = req.body;
 
     try {
@@ -21,6 +20,9 @@ export const CreateNotebook:RequestHandler<unknown, unknown, CreateNotebookBody,
         const newNotebook = await NotebookModel.create({
             userId: userId, title: title, description: description
         });
+
+        // TODO: update user notebooks and notebookName array
+
 
         res.status(200).json(newNotebook);
     } catch (error) {
