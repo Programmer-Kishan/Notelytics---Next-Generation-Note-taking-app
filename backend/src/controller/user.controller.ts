@@ -73,6 +73,9 @@ export const Login:RequestHandler<unknown, unknown, LoginBody, unknown> = async 
         }
 
         // TODO: Add user session here
+        req.session.userId = user._id;
+        req.session.name = user.username;
+        
         res.status(200).json(user);
 
     } catch (error) {
