@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import createHttpError from "http-errors";
 
+import UserModel from "../models/user";
 import NotebookModel from "../models/notebook";
 
 interface CreateNotebookBody {
@@ -13,6 +14,10 @@ export const CreateNotebook:RequestHandler<unknown, unknown, CreateNotebookBody,
     const {title, description} = req.body;
 
     try {
+        if (!userId) {
+            throw createHttpError(401, "Login Again");
+        }
+
         if (!title || !description) {
             throw createHttpError(400, "Parameter Missing");
         }
@@ -22,6 +27,15 @@ export const CreateNotebook:RequestHandler<unknown, unknown, CreateNotebookBody,
         });
 
         // TODO: update user notebooks and notebookName array
+
+        const user = await UserModel.findById(userId).exec();
+
+        if (!user) {
+            throw createHttpError(400, "User Not Found");
+        }
+
+        // user.notebooks.push(newNotebook._id);
+        // user.notebookNames.push(newNotebook.title?)
 
 
         res.status(200).json(newNotebook);

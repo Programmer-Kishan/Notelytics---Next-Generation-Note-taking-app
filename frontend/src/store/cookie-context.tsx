@@ -1,4 +1,4 @@
-import { createContext, FC, ReactNode, useState } from "react";
+import { createContext, FC, ReactNode, useState, useEffect } from "react";
 import { ICookie, CookieContextType } from "../@types/cookie";
 import Cookies from "js-cookie"
 
@@ -7,6 +7,15 @@ export const CookieContext = createContext<CookieContextType | null>(null);
 const CookieProvider: FC<{children: ReactNode}> = ({children}) => {
 
     const [user, setUser] = useState<ICookie | null>(null);
+
+    useEffect(() => {
+        const storedUser = JSON.parse(Cookies.get("user") as string);
+        if (!storedUser) {
+            setUser(null);
+            return;
+        }
+        setUser(storedUser);
+    }, [])
 
     function saveCookies(user: ICookie) {
         // console.log(user);
