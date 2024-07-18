@@ -34,9 +34,11 @@ export const CreateNotebook:RequestHandler<unknown, unknown, CreateNotebookBody,
             throw createHttpError(400, "User Not Found");
         }
 
-        // user.notebooks.push(newNotebook._id);
-        // user.notebookNames.push(newNotebook.title?)
+        console.log(newNotebook)
+        user.notebooks.push(newNotebook._id);
+        user.notebookNames.push(newNotebook.title as string)
 
+        await user.save();
 
         res.status(200).json(newNotebook);
     } catch (error) {
