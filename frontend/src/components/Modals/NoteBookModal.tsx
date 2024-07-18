@@ -1,17 +1,25 @@
-import { FormEvent, forwardRef } from "react";
+import { FormEvent, forwardRef, useContext } from "react";
 
 import GeneralInput from "../Inputs/GeneralInput";
 import LongButtons from "../Buttons/LongButtons";
 import * as NotebookApi from "../../network/notebook_api";
+import { CookieContext } from "../../store/cookie-context";
+import { CookieContextType } from "../../@types/cookie";
 
 const NoteBookModal = forwardRef<HTMLDialogElement>((_, ref) => {
+
+    const ctx = useContext(CookieContext) as CookieContextType
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         const fd = new FormData(event.target as HTMLFormElement);
         const data = Object.fromEntries(fd.entries())
-        console.log(data)
+        console.log(data);
+
+        const user = ctx.user;
+        console.log(ctx);
+        console.log(ctx.user);
 
         try {
             const newNotebook = await NotebookApi.create({
@@ -19,8 +27,12 @@ const NoteBookModal = forwardRef<HTMLDialogElement>((_, ref) => {
                 description: data.notebookdesc as string,
             })
 
-            console.log(newNotebook);
-            // TODO: add notebooks id and name to cookies
+            // console.log(newNotebook);
+            // console.log(user);
+            user.notebooks.push(newNotebook._id);
+            user.notebookNames.push(newNotebook.title);
+
+            console.log(user);
             ref?.current.close()    // dont worry about error
         } catch(error) {
             console.log("Problem Occured while creating notebook, please try again!");
