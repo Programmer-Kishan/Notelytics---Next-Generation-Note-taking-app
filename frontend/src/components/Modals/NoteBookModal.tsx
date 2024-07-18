@@ -21,7 +21,7 @@ const NoteBookModal = forwardRef<HTMLDialogElement>((_, ref) => {
 
             console.log(newNotebook);
             // TODO: add notebooks id and name to cookies
-            // TODO: close the modal
+            ref?.current.close()    // dont worry about error
         } catch(error) {
             console.log("Problem Occured while creating notebook, please try again!");
         }
@@ -29,10 +29,12 @@ const NoteBookModal = forwardRef<HTMLDialogElement>((_, ref) => {
 
     return (
         <dialog ref={ref} className="bg-[#EAEAEA] px-4 py-7 rounded-lg w-1/3">
-            <form method="dialog" onSubmit={handleSubmit}>
+            <form method="dialog">
                 <div className="w-full text-right">
                     <button className="font-lg text-gray-700 font-montserrat font-extrabold">X</button>
                 </div>
+            </form>
+            <form onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-5">
                     <GeneralInput label="Note Book Name" type="text" name="notebookName" />
                     <GeneralInput label="Note Book Description" type="textarea" name="notebookdesc" />
