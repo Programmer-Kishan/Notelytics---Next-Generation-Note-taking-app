@@ -34,7 +34,12 @@ function App() {
       children: [
         {
           path: ":userId",
-          element: <UserDashboard />
+          children: [
+            {
+              path: "",
+              element: <UserDashboard />
+            },
+          ]
         }
       ]
     }

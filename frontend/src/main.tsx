@@ -1,14 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import './index.css'
+import "./index.css"
 
-import CookieProvider from './store/cookie-context.tsx'
+import { Provider } from 'react-redux'
+import store from './store/index.ts'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <CookieProvider>
+  <Provider store={store}>
     <React.StrictMode>
       <App />
     </React.StrictMode>
-  </CookieProvider>
+  </Provider>
 )

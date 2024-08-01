@@ -1,21 +1,24 @@
-import { useState, FormEvent, useContext } from "react"
+import { useState, FormEvent } from "react"
 import { Blocks } from "react-loader-spinner";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import LongButtons from "../../Buttons/LongButtons"
 import FormInput from "../../Inputs/FormInput"
 import * as UserApi from "../../../network/user_api";
-import { CookieContext } from "../../../store/cookie-context";
-import { CookieContextType } from "../../../@types/cookie";
+import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
+import { userActions } from "../../../store/userStore";
 
 const Login = () => {
 
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [credError, setCredError] = useState<string | null>(null)
+  const [credError, setCredError] = useState<string | null>(null);
 
-  const ctx = useContext(CookieContext) as CookieContextType;
+  const dispatch = useAppDispatch();
+  const userCookie = useAppSelector((state) => state.user);
+  console.log(userCookie);
+
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -32,7 +35,8 @@ const Login = () => {
       })
       // TODO: Needs to redirect to dashboard
       console.log(typeof(user), user);
-      ctx.setCookies(user);
+      dispatch(userActions.save(user));
+
       navigate(`/user/${user._id}`);
     } catch(error) {
       console.log(error.message);

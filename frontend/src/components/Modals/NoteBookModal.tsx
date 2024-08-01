@@ -1,16 +1,18 @@
-import { FormEvent, forwardRef, useContext, useState } from "react";
+import { FormEvent, forwardRef, useState } from "react";
 
 import GeneralInput from "../Inputs/GeneralInput";
 import LongButtons from "../Buttons/LongButtons";
 import * as NotebookApi from "../../network/notebook_api";
-import { CookieContext } from "../../store/cookie-context";
-import { CookieContextType } from "../../@types/cookie";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { userActions } from "../../store/userStore";
 
 const NoteBookModal = forwardRef<HTMLDialogElement>((_, ref) => {
 
-    const ctx = useContext(CookieContext) as CookieContextType;
-
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    const dispatch = useAppDispatch();
+    const user = useAppSelector((state) => state.user)
+    console.log(user);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -21,23 +23,23 @@ const NoteBookModal = forwardRef<HTMLDialogElement>((_, ref) => {
         const data = Object.fromEntries(fd.entries())
         console.log(data);
 
-        const user = ctx.user;
-        // console.log(ctx);
-        // console.log(ctx.user);
-
         try {
             const newNotebook = await NotebookApi.create({
                 title: data.notebookName as string,
                 description: data.notebookdesc as string,
             })
+            console.log(newNotebook);
+            const ids = [...user.notebooks, newNotebook._id]
+            const names = [...user.notebookNames, newNotebook.title]
 
-            // console.log(newNotebook);
-            // console.log(user);
-            user.notebooks.push(newNotebook._id);
-            user.notebookNames.push(newNotebook.title);
+            dispatch(userActions.update({field: 'notebooks', newData: ids}))
+            dispatch(userActions.update({field: 'notebookNames', newData: names}))
 
             console.log(user);
+
             ref?.current.close()    // dont worry about error
+
+            // window.location.reload();
         } catch(error) {
             console.log(error.message)
             console.log("Problem Occured while creating notebook, please try again!");
